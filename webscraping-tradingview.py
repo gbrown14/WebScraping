@@ -12,13 +12,41 @@ from bs4 import BeautifulSoup
 ##  > sudo "./Install Certificates.command"
 
 
-url = 'https://www.tradingview.com/markets/stocks-usa/market-movers-gainers/'
+#url = 'https://www.tradingview.com/markets/stocks-usa/market-movers-gainers/'
+url = 'https://www.webull.com/quote/us/gainers'
+
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3'}
+req = Request(url, headers=headers)
+webpage = urlopen(req).read()
+soup = BeautifulSoup(webpage, 'html.parser')
+title = soup.title
 
-		
+#print(title.text)
 
+tablecells = soup.findAll("div", attrs={"class":"table-cell"})
 
+#for cell in tablecells[:7]:
+   #print(cell.text)
 
+counter = 1
+
+for x in range(5):
+    name = tablecells[counter].text
+    change = tablecells[counter+2].text
+    high = float(tablecells[counter+4].text)
+    low = float(tablecells[counter+5].text)
+
+    calc_change = ((high-low)/low)*100
+
+    print(name)
+    print(f"%change on webpage: {change}")
+    print(f"High: {high}")
+    print(f"Low: {low}")
+    print(f"Caluclated Change %: {calc_change}")
+    print()
+    print()
+
+    counter+=11
 
 
 
